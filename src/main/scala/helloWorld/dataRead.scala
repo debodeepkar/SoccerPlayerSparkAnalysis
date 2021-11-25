@@ -6,7 +6,7 @@ object dataRead extends App {
   val spark = SparkSession.builder.master("local[*]").appName("dataRead").getOrCreate()
   //val sc = new spark.sparkContext("local[*]", "dataRead")
 
-  val lines = spark.sparkContext.parallelize(
+  /*val lines = spark.sparkContext.parallelize(
     Seq("Spark Intellij Idea Scala test one",
       "Spark Intellij Idea Scala test two",
       "Spark Intellij Idea Scala test three"))
@@ -16,13 +16,21 @@ object dataRead extends App {
     .map(word => (word, 1))
     .reduceByKey(_ + _)
 
-  counts.foreach(println)
+  counts.foreach(println)*/
 
 
-  val df = spark.read.csv.("/Users/debodeepkar/IdeaProjects/SoccerPlayerSparkAnalysis/data/players.csv")
+  val df = spark.read.option("header",true).csv("/Users/debodeepkar/IdeaProjects/SoccerPlayerSparkAnalysis/data/players.csv")
 
-  df.show()
-  print("hi")
+  df.show(5)
+
+
+  df.createOrReplaceTempView("soccer")
+
+  spark.sql("select long_name from soccer").show()
+
+
+
+
 
 
 }
